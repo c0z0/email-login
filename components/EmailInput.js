@@ -2,13 +2,12 @@ import React, { Component } from 'react'
 
 export default class EmailInput extends Component {
 	state = {
-		email: '',
 		focused: false
 	}
 
 	render() {
-		const { borderColor } = this.props
-		const { email, focused } = this.state
+		const { borderColor, value } = this.props
+		const { focused } = this.state
 
 		return (
 			<div className={`container ${focused ? 'container--focused' : ''}`}>
@@ -18,8 +17,8 @@ export default class EmailInput extends Component {
 					type="email"
 					placeholder="Email..."
 					className="input"
-					value={email}
-					onChange={({ target: { value: email } }) => this.setState({ email })}
+					value={value}
+					onChange={e => this.props.onChange(e)}
 				/>
 				<style jsx>{`
 					.container {

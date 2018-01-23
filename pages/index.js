@@ -4,14 +4,78 @@ import EmailInput from '../components/EmailInput'
 import Button from '../components/Button'
 
 export default class Index extends Component {
+	state = { email: '', verification: false }
+	renderForm() {
+		const { email } = this.state
+
+		return [
+			<h2 className="title">Login to get started</h2>,
+			<div>
+				<EmailInput
+					value={email}
+					onChange={({ target: { value: email } }) => this.setState({ email })}
+				/>
+			</div>,
+			<Button
+				text="Continue"
+				onClick={() => {
+					this.setState({ verification: 'Naughty Seal' })
+				}}
+			/>,
+			<style jsx>{`
+				.title {
+					font-weight: normal;
+				}
+			`}</style>
+		]
+	}
+
+	renderConfirm() {
+		const { verification } = this.state
+
+		return [
+			<h2 className="title">Login to get started</h2>,
+			,
+			<div>
+				<p className="instructions">We sent an email to {this.state.email}.</p>
+				<p className="instructions">
+					Go to your inbox, verify that the security code matches{' '}
+					<span className="code">{verification}</span> and follow the link.
+				</p>
+			</div>,
+			<a
+				className="undo"
+				onClick={() => this.setState({ verification: false })}
+			>
+				Undo
+			</a>,
+			<style jsx>{`
+				.undo {
+					cursor: pointer;
+					text-decoration: underline;
+					color: #ff0080;
+					text-align: right;
+				}
+
+				.title {
+					font-weight: normal;
+				}
+
+				.code {
+					color: #ff0080;
+				}
+			`}</style>
+		]
+	}
+
 	render() {
+		const { verification } = this.state
 		return (
 			<div className="container">
 				<div className="form">
-					<h3 className="title">Enter email to login:</h3>
-					<EmailInput />
-					<Button text="Continue" />
+					{verification ? this.renderConfirm() : this.renderForm()}
 				</div>
+
 				<style jsx>{`
 					.container {
 						display: flex;
@@ -30,14 +94,10 @@ export default class Index extends Component {
 						padding: 20px;
 						border-radius: 4px;
 					}
-
-					.title {
-						font-weight: normal;
-					}
 				`}</style>
 				<style jsx global>{`
 					body {
-						font-family: Menlo;
+						font-family: Lato;
 						margin: 0;
 						padding: 0;
 						background: black;
