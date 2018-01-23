@@ -1,0 +1,20 @@
+{
+	"name": "email-login",
+	"version": "1.0.0",
+	"main": "index.js",
+	"repository": "git@github.com:c0z0/email-login.git",
+	"author": "Cosmin Serdean <cosmoserdean@gmail.com>",
+	"license": "MIT",
+	"dependencies": {
+		"micro": "^9.1.0",
+		"micro-route": "^2.5.0",
+		"next": "^4.2.3",
+		"react": "^16.2.0",
+		"react-dom": "^16.2.0"
+	},
+	"scripts": {
+		"start": "NODE_ENV=production node server.js",
+		"build": "next build",
+		"dev": "nodemon --watch server.js --watch server/ server.js"
+	}
+}
