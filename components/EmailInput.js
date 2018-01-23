@@ -43,7 +43,7 @@ export default class EmailInput extends Component {
 						margin: 0;
 						border: none;
 						font-size: 14px;
-						padding: 8px 8px;
+						padding: 8px;
 						outline: none;
 						width: 100%;
 					}
