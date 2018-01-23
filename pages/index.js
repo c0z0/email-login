@@ -4,7 +4,25 @@ import EmailInput from '../components/EmailInput'
 import Button from '../components/Button'
 
 export default class Index extends Component {
-	state = { email: '', verification: false }
+	state = { email: '', secret: false }
+	async submit() {
+		const { email } = this.state
+
+		const req = await fetch('/api/login', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ email })
+		})
+
+		if (!req.ok) {
+			return console.log('error', req)
+		}
+
+		const data = await req.json()
+
+		this.setState({ secret: data.secret })
+	}
+
 	renderForm() {
 		const { email } = this.state
 
@@ -16,12 +34,7 @@ export default class Index extends Component {
 					onChange={({ target: { value: email } }) => this.setState({ email })}
 				/>
 			</div>,
-			<Button
-				text="Continue"
-				onClick={() => {
-					this.setState({ verification: 'Naughty Seal' })
-				}}
-			/>,
+			<Button text="Continue" onClick={this.submit.bind(this)} />,
 			<style jsx>{`
 				.title {
 					font-weight: normal;
@@ -31,7 +44,7 @@ export default class Index extends Component {
 	}
 
 	renderConfirm() {
-		const { verification } = this.state
+		const { secret } = this.state
 
 		return [
 			<h2 className="title">Login to get started</h2>,
@@ -40,13 +53,10 @@ export default class Index extends Component {
 				<p className="instructions">We sent an email to {this.state.email}.</p>
 				<p className="instructions">
 					Go to your inbox, verify that the security code matches{' '}
-					<span className="code">{verification}</span> and follow the link.
+					<span className="code">{secret}</span> and follow the link.
 				</p>
 			</div>,
-			<a
-				className="undo"
-				onClick={() => this.setState({ verification: false })}
-			>
+			<a className="undo" onClick={() => this.setState({ secret: false })}>
 				Undo
 			</a>,
 			<style jsx>{`
@@ -69,11 +79,11 @@ export default class Index extends Component {
 	}
 
 	render() {
-		const { verification } = this.state
+		const { secret } = this.state
 		return (
 			<div className="container">
 				<div className="form">
-					{verification ? this.renderConfirm() : this.renderForm()}
+					{secret ? this.renderConfirm() : this.renderForm()}
 				</div>
 
 				<style jsx>{`
