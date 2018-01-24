@@ -23,8 +23,10 @@ async function handleLogin({ email }, logins) {
 	const id = shortid.generate()
 	const publicId = shortid.generate()
 
-	if (isMailActive) await sendMail({ to: email, secret, id })
-	else console.log('http://localhost:3000/complete?i=' + id)
+	if (isMailActive) {
+		await sendMail({ to: email, secret, id })
+		console.log('Sent mail ' + secret)
+	} else console.log('http://localhost:3000/complete?i=' + id)
 
 	logins.push({ secret, id, email, complete: false, publicId })
 

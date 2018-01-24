@@ -18,5 +18,12 @@
 		"start": "NODE_ENV=production node server.js",
 		"build": "next build",
 		"dev": "nodemon --watch server.js --watch server/ server.js"
+	},
+	"now": {
+		"env": {
+			"MAILGUN_KEY": "@mailgun",
+			"HOST": "email-login.demos.cserdean.me"
+		},
+		"alias": "email-login.demos.cserdean.me"
 	}
 }
