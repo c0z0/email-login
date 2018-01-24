@@ -6,15 +6,12 @@
 	"author": "Cosmin Serdean <cosmoserdean@gmail.com>",
 	"license": "MIT",
 	"dependencies": {
-		"jsonwebtoken": "^8.1.1",
 		"micro": "^9.1.0",
 		"micro-route": "^2.5.0",
 		"next": "^4.2.3",
 		"react": "^16.2.0",
 		"react-dom": "^16.2.0",
-		"shortid": "^2.2.8",
-		"socket.io": "^2.0.4",
-		"socket.io-client": "^2.0.4"
+		"shortid": "^2.2.8"
 	},
 	"scripts": {
 		"start": "NODE_ENV=production node server.js",
