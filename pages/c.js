@@ -4,7 +4,7 @@ export default ({ url: { query: { valid } } }) => {
 	return (
 		<div className="container">
 			<h2 className="title">
-				{valid ? 'Logged in successfully.' : 'Invalid token.'}
+				{valid ? 'Login successful.' : 'Invalid token.'}
 			</h2>
 			{valid && <p>You may close this window.</p>}
 			<style jsx>{`

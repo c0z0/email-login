@@ -15,7 +15,6 @@ module.exports = ({ to, secret, id }) =>
 			from: 'Login Verification <email-login@email.cserdean.me>',
 			to,
 			subject: `Login Verification (code : ${secret})`,
-			//html: `Hello. We have received a login attempt with the following code: <b>${secret}</b>. To complete the login process, please follow this <a href="${host}/complete?i=${id}">link.</a>`,
 			html: emailTemplate({ link: `${host}/complete?i=${id}`, secret })
 		}
 
