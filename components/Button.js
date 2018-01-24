@@ -1,9 +1,7 @@
 import React from 'react'
 
 const Button = ({ text, borderColor, onClick }) => [
-	<button className="button--primary" onClick={onClick}>
-		{text}
-	</button>,
+	<input className="button--primary" type="submit" text={text} value={text} />,
 	<style jsx>{`
 		.button--primary {
 			background: none;

@@ -12,6 +12,7 @@ export default class Index extends Component {
 		loading: false
 	}
 	async submit() {
+		console.log('Submit')
 		const { email } = this.state
 
 		const req = await fetch('/login', {
@@ -67,7 +68,7 @@ export default class Index extends Component {
 				/>
 				{error && <p className="error">An error occurred.</p>}
 			</div>,
-			<Button text="Continue" onClick={this.submit.bind(this)} />,
+			<Button text="Continue" />,
 			<style jsx>{`
 				.error {
 					color: #ff0080;
