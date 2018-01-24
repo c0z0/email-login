@@ -1,23 +1,30 @@
 const shortid = require('shortid')
 const { send } = require('micro')
 
+const sendMail = require('./sendMail')
 const secrets = require('./secrets.json')
 
+const isMailActive = process.env.MAILGUN_KEY && true
+
 function generateSecret() {
-	return (
-		secrets.adjectives[Math.floor(Math.random() * secrets.adjectives.length)] +
-		' ' +
+	let adjective =
+		secrets.adjectives[Math.floor(Math.random() * secrets.adjectives.length)]
+	let animal =
 		secrets.animals[Math.floor(Math.random() * secrets.animals.length)]
-	)
+
+	animal = animal[0].toUpperCase() + animal.slice(1)
+	adjective = adjective[0].toUpperCase() + adjective.slice(1)
+	return adjective + ' ' + animal
 }
 
-function handleLogin({ email }, logins) {
+async function handleLogin({ email }, logins) {
 	const secret = generateSecret()
 
 	const id = shortid.generate()
 	const publicId = shortid.generate()
 
-	console.log('http://localhost:3000/complete?i=' + id)
+	if (isMailActive) await sendMail({ to: email, secret, id })
+	else console.log('http://localhost:3000/complete?i=' + id)
 
 	logins.push({ secret, id, email, complete: false, publicId })
 

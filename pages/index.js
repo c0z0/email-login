@@ -150,6 +150,9 @@ export default class Index extends Component {
 
 		return (
 			<div className="container">
+				<a className="src" href="https://github.com/c0z0/email-login">
+					[src]
+				</a>
 				<form
 					onSubmit={e => {
 						e.preventDefault()
@@ -159,6 +162,14 @@ export default class Index extends Component {
 					<div className="form">{content}</div>
 				</form>
 				<style jsx>{`
+					.src {
+						position: absolute;
+						top: 16px;
+						left: 16px;
+						color: #ff0080;
+						text-decoration: none;
+						font-family: Menlo;
+					}
 					.container {
 						display: flex;
 						height: 100vh;

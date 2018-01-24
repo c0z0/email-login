@@ -6,6 +6,7 @@
 	"author": "Cosmin Serdean <cosmoserdean@gmail.com>",
 	"license": "MIT",
 	"dependencies": {
+		"mailgun-js": "^0.14.2",
 		"micro": "^9.1.0",
 		"micro-route": "^2.5.0",
 		"next": "^4.2.3",

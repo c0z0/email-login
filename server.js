@@ -21,7 +21,7 @@ const server = micro(async (req, res) => {
 
 	if (match(req, '/login', 'POST')) {
 		const json = await micro.json(req)
-		const l = handleLogin(json, logins)
+		const l = await handleLogin(json, logins)
 
 		return micro.send(res, 200, l)
 	}
