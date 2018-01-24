@@ -1,6 +1,7 @@
 const mailgun = require('mailgun-js')
 const apiKey = process.env.MAILGUN_KEY
-const host = process.env.HOST || 'http://localhost:3000'
+const host =
+	process.env.HOST || 'http://localhost:' + (process.env.PORT || 3000)
 const domain = 'email.cserdean.me'
 
 module.exports = ({ to, secret, id }) =>

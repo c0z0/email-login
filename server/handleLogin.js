@@ -25,8 +25,9 @@ async function handleLogin({ email }, logins) {
 
 	if (isMailActive) {
 		await sendMail({ to: email, secret, id })
-		console.log('Sent mail ' + secret)
-	} else console.log('http://localhost:3000/complete?i=' + id)
+		console.log(`Sent mail ${email} with scret ${secret}.`)
+	} else
+		console.log(`http://localhost:${process.env.PORT || 3000}/complete?i=` + id)
 
 	logins.push({ secret, id, email, complete: false, publicId })
 
