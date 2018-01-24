@@ -4,7 +4,13 @@ import EmailInput from '../components/EmailInput'
 import Button from '../components/Button'
 
 export default class Index extends Component {
-	state = { email: '', secret: false }
+	state = {
+		email: '',
+		secret: false,
+		waiting: false,
+		loggedIn: false,
+		loading: false
+	}
 	async submit() {
 		const { email } = this.state
 
@@ -16,6 +22,7 @@ export default class Index extends Component {
 
 		if (!req.ok) {
 			return this.setState({ error: true })
+			console.log('error')
 		}
 
 		const data = await req.json()
@@ -27,6 +34,8 @@ export default class Index extends Component {
 
 	async verify() {
 		const { publicId } = this.state
+
+		this.setState({ waiting: true })
 
 		const req = await fetch('/verify', {
 			method: 'POST',
@@ -42,12 +51,12 @@ export default class Index extends Component {
 
 		if (complete === true) {
 			clearInterval(this.interval)
-			alert('Logged in')
+			this.setState({ loggedIn: true })
 		}
 	}
 
 	renderForm() {
-		const { email } = this.state
+		const { email, error } = this.state
 
 		return [
 			<h2 className="title">Login to get started</h2>,
@@ -56,9 +65,14 @@ export default class Index extends Component {
 					value={email}
 					onChange={({ target: { value: email } }) => this.setState({ email })}
 				/>
+				{error && <p className="error">An error occurred.</p>}
 			</div>,
 			<Button text="Continue" onClick={this.submit.bind(this)} />,
 			<style jsx>{`
+				.error {
+					color: #ff0080;
+				}
+
 				.title {
 					font-weight: normal;
 				}
@@ -66,8 +80,22 @@ export default class Index extends Component {
 		]
 	}
 
+	renderLoggedIn() {
+		const { email } = this.state
+		return [
+			<h2 className="title">
+				Logged in as {email}{' '}
+				<style jsx>{`
+					.title {
+						font-weight: normal;
+					}
+				`}</style>
+			</h2>
+		]
+	}
+
 	renderConfirm() {
-		const { secret } = this.state
+		const { secret, waiting, error } = this.state
 
 		return [
 			<h2 className="title">Login to get started</h2>,
@@ -78,11 +106,21 @@ export default class Index extends Component {
 					Go to your inbox, verify that the security code matches{' '}
 					<span className="code">{secret}</span> and follow the link.
 				</p>
+				{error && <p className="error">An error occurred.</p>}
 			</div>,
-			<a className="undo" onClick={() => this.setState({ secret: false })}>
+			<a
+				className="undo"
+				onClick={() => {
+					this.setState({ secret: false })
+					clearInterval(this.interval)
+				}}
+			>
 				Undo
 			</a>,
 			<style jsx>{`
+				.error {
+					color: #ff0080;
+				}
 				.undo {
 					cursor: pointer;
 					text-decoration: underline;
@@ -102,13 +140,24 @@ export default class Index extends Component {
 	}
 
 	render() {
-		const { secret } = this.state
+		const { secret, loggedIn } = this.state
+
+		let content = null
+
+		if (!secret) content = this.renderForm()
+		else if (!loggedIn) content = this.renderConfirm()
+		else content = this.renderLoggedIn()
+
 		return (
 			<div className="container">
-				<div className="form">
-					{secret ? this.renderConfirm() : this.renderForm()}
-				</div>
-
+				<form
+					onSubmit={e => {
+						e.preventDefault()
+						if (!secret) this.submit()
+					}}
+				>
+					<div className="form">{content}</div>
+				</form>
 				<style jsx>{`
 					.container {
 						display: flex;
