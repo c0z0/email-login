@@ -15,6 +15,8 @@ export default class Index extends Component {
 		console.log('Submit')
 		const { email } = this.state
 
+		this.setState({ loading: true })
+
 		const req = await fetch('/login', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
@@ -22,13 +24,17 @@ export default class Index extends Component {
 		})
 
 		if (!req.ok) {
-			return this.setState({ error: true })
+			return this.setState({ error: true, loading: false })
 			console.log('error')
 		}
 
 		const data = await req.json()
 
-		this.setState({ secret: data.secret, publicId: data.publicId })
+		this.setState({
+			secret: data.secret,
+			publicId: data.publicId,
+			loading: false
+		})
 
 		this.interval = setInterval(this.verify.bind(this), 3000)
 	}
@@ -57,18 +63,22 @@ export default class Index extends Component {
 	}
 
 	renderForm() {
-		const { email, error } = this.state
+		const { email, error, loading } = this.state
 
 		return [
 			<h2 className="title">Login to get started</h2>,
 			<div>
 				<EmailInput
+					disabled={loading}
 					value={email}
 					onChange={({ target: { value: email } }) => this.setState({ email })}
 				/>
 				{error && <p className="error">An error occurred.</p>}
 			</div>,
-			<Button text="Continue" />,
+			<Button
+				text={loading ? 'Loading' : 'Continue'}
+				disabled={loading || !this.validateEmail(email)}
+			/>,
 			<style jsx>{`
 				.error {
 					color: #ff0080;
@@ -93,6 +103,11 @@ export default class Index extends Component {
 				`}</style>
 			</h2>
 		]
+	}
+
+	validateEmail(email) {
+		var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+		return re.test(email.toLowerCase())
 	}
 
 	renderConfirm() {
@@ -180,7 +195,7 @@ export default class Index extends Component {
 
 					.form {
 						display: flex;
-						justify-content: space-between;
+						justify-content: ${loggedIn ? 'center' : 'space-between'};
 						flex-direction: column;
 						width: 40vw;
 						height: 75vh;

@@ -6,12 +6,17 @@ export default class EmailInput extends Component {
 	}
 
 	render() {
-		const { borderColor, value } = this.props
+		const { borderColor, value, disabled } = this.props
 		const { focused } = this.state
 
 		return (
-			<div className={`container ${focused ? 'container--focused' : ''}`}>
+			<div
+				className={`container ${focused ? 'container--focused' : ''} ${
+					disabled ? 'container--disabled' : ''
+				}`}
+			>
 				<input
+					disabled={disabled}
 					onBlur={() => this.setState({ focused: false })}
 					onFocus={() => this.setState({ focused: true })}
 					type="email"
@@ -33,6 +38,16 @@ export default class EmailInput extends Component {
 					.container--focused,
 					.container:hover {
 						border-color: ${borderColor};
+					}
+
+					.container--disabled {
+						border-color: rgba(255, 255, 255, 0.3) !important;
+						color: rgba(255, 255, 255, 0.5);
+					}
+
+					.container--disabled .input {
+						cursor: default;
+						color: rgba(255, 255, 255, 0.3);
 					}
 
 					.input {

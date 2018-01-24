@@ -1,7 +1,13 @@
 import React from 'react'
 
-const Button = ({ text, borderColor, onClick }) => [
-	<input className="button--primary" type="submit" text={text} value={text} />,
+const Button = ({ text, borderColor, onClick, disabled }) => [
+	<input
+		className={`button--primary ${disabled ? 'button--disabled' : ''}`}
+		type="submit"
+		text={text}
+		value={text}
+		disabled={disabled}
+	/>,
 	<style jsx>{`
 		.button--primary {
 			background: none;
@@ -17,6 +23,13 @@ const Button = ({ text, borderColor, onClick }) => [
 
 		.button--primary:hover {
 			background: ${borderColor || '#ff0080'};
+		}
+
+		.button--disabled {
+			color: rgba(255, 255, 255, 0.3);
+			border-color: rgba(255, 255, 255, 0.3);
+			background-color: transparent !important;
+			cursor: default;
 		}
 	`}</style>
 ]
