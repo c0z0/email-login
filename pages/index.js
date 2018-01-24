@@ -203,6 +203,15 @@ export default class Index extends Component {
 						padding: 20px;
 						border-radius: 4px;
 					}
+
+					@media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
+						.form {
+							height: 90vh;
+							padding: 0;
+							width: 90vw;
+							border: none;
+						}
+					}
 				`}</style>
 				<style jsx global>{`
 					body {
