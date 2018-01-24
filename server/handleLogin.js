@@ -1,4 +1,4 @@
-const jwt = require('jsonwebtoken')
+const shortid = require('shortid')
 const { send } = require('micro')
 
 const secrets = require('./secrets.json')
@@ -11,26 +11,31 @@ function generateSecret() {
 	)
 }
 
-async function handleLogin(res, { email }) {
-	const token = await jwt.sign({ email }, 'test')
-
+function handleLogin({ email }, logins) {
 	const secret = generateSecret()
 
-	console.log('http://localhost:3000/verify?token=' + token)
+	const id = shortid.generate()
+	const publicId = shortid.generate()
 
-	return send(res, 200, { secret })
+	console.log('http://localhost:3000/complete?i=' + id)
+
+	logins.push({ secret, id, email, complete: false, publicId })
+
+	return { secret, publicId }
 }
 
-async function verify(res, token) {
-	try {
-		await jwt.verify(token, 'test')
-		console.log('ok')
+function completeLogin(id, logins) {
+	const i = logins.findIndex(l => l.id === id)
+	if (i > -1) {
+		logins[i].complete = true
 		return true
-	} catch (e) {
-		console.log(e)
-
-		return false
 	}
+	return false
 }
 
-module.exports = { handleLogin, verify }
+function verifyLogin(id, logins) {
+	const i = logins.findIndex(l => l.publicId === id)
+	return i > -1 && logins[i].complete
+}
+
+module.exports = { handleLogin, completeLogin, verifyLogin }

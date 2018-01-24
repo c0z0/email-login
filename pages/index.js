@@ -8,19 +8,42 @@ export default class Index extends Component {
 	async submit() {
 		const { email } = this.state
 
-		const req = await fetch('/api/login', {
+		const req = await fetch('/login', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({ email })
 		})
 
 		if (!req.ok) {
-			return console.log('error', req)
+			return this.setState({ error: true })
 		}
 
 		const data = await req.json()
 
-		this.setState({ secret: data.secret })
+		this.setState({ secret: data.secret, publicId: data.publicId })
+
+		this.interval = setInterval(this.verify.bind(this), 3000)
+	}
+
+	async verify() {
+		const { publicId } = this.state
+
+		const req = await fetch('/verify', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ id: publicId })
+		})
+
+		if (!req.ok) {
+			return this.setState({ error: true })
+		}
+
+		const { complete } = await req.json()
+
+		if (complete === true) {
+			clearInterval(this.interval)
+			alert('Logged in')
+		}
 	}
 
 	renderForm() {
